@@ -174,4 +174,3 @@ class EnvManager:
             print(f"  {key}: {value}")
 
 
-sys.modules[__name__].__class__ = EnvManager  # change module class into This

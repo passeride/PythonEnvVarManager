@@ -1,5 +1,3 @@
-import sys
-
 from .EnvVarManager import EnvManager
 
 
@@ -58,4 +56,3 @@ def get_all_vars() -> dict:
     return env.get_all_vars()
 
 
-sys.modules[__name__].__class__ = EnvManager  # change module class into This
