@@ -4,17 +4,18 @@ import re
 from os.path import basename
 from typing import Any
 
-from loguru import logger as log
 from dotenv import load_dotenv
+from loguru import logger as log
 
 
 class EnvManager:
     """Singleton class to manage environment variables and write missing ones to a .env file."""
+
     _instance = None
     _initialized = False
     _write_to_dotenv = False
 
-    def __new__(cls, *args : Any, **kwargs) -> "EnvManager":
+    def __new__(cls, *args: Any, **kwargs) -> "EnvManager":
         """Singleton constructor to ensure only one instance is created."""
         if cls._instance is None:
             cls._instance = super().__new__(cls)
@@ -41,9 +42,13 @@ class EnvManager:
             self.getenv("WRITE_ENV_VARS_TO_DOTENV", "False").lower() == "true"
         )
         if self._write_to_dotenv:
-            log.debug("Initializing EnvManager and writing undocumented vars to dotenv file, to change this update `WRITE_ENV_VARS_TO_DOTENV` to `False`")
+            log.debug(
+                "Initializing EnvManager and writing undocumented vars to dotenv file, to change this update `WRITE_ENV_VARS_TO_DOTENV` to `False`"
+            )
         else:
-            log.debug("Initializing EnvManager without updating dotenv, to change this update `WRITE_ENV_VARS_TO_DOTENV` to `True`")
+            log.debug(
+                "Initializing EnvManager without updating dotenv, to change this update `WRITE_ENV_VARS_TO_DOTENV` to `True`"
+            )
 
     def _load_dotenv_file(self) -> None:
         """Load the .env file contents into memory as a list of lines."""
@@ -87,7 +92,9 @@ class EnvManager:
         if not filename or not line_number:
             comment_line = "# Default value set from unknown source\n"
         else:
-            comment_line = f"# Default value set from {filename}:{line_number}\n"
+            comment_line = (
+                f"# Default value set from {filename}:{line_number}\n"
+            )
         key_value = value if value else ""
         commented_key_line = f"# {key}={key_value} # Default: {default}\n"
         try:
@@ -121,7 +128,11 @@ class EnvManager:
         line_number = caller_frame.lineno
 
         # Only update the .env file if no active or commented line already mentions the key.
-        if self._write_to_dotenv and not self._is_key_in_env_file(key) and value is not None:
+        if (
+            self._write_to_dotenv
+            and not self._is_key_in_env_file(key)
+            and value is not None
+        ):
             self._append_missing_var_to_dotenv(
                 key, value, default, filename, line_number
             )
@@ -145,9 +156,7 @@ class EnvManager:
         os.environ[key] = str(value)
 
         if self._write_to_dotenv and not self._is_key_in_env_file(key):
-            self._append_missing_var_to_dotenv(
-                key, value, "", None, None
-            )
+            self._append_missing_var_to_dotenv(key, value, "", None, None)
         self._registered_vars[key] = str(value)
 
     def get_all_vars(self) -> dict:
@@ -165,16 +174,4 @@ class EnvManager:
             print(f"  {key}: {value}")
 
 
-ENV = EnvManager()
-# Example usage:
-if __name__ == "__main__":
-    # If DATABASE_URL is not set, it will be added (as a commented-out default) to .env.
-    db_url = ENV.getenv("DATABASE_URL", "sqlite:///:memory:")
-    # If SECRET_KEY is not set, the default will be used and an entry will be added if needed.
-    secret_key = ENV.getenv("SECRET_KEY", "default-secret")
-
-    # Optionally, set another environment variable programmatically.
-    ENV.setenv("NEW_VAR", "some_value")
-
-    # Display all tracked environment variables.
-    ENV.display_env_vars()
+sys.modules[__name__].__class__ = EnvManager  # change module class into This
