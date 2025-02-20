@@ -9,7 +9,6 @@ repos:
       - id: debug-statements
       - id: end-of-file-fixer
         exclude: ^test_s3/
-        exclude: ^org/
       - id: trailing-whitespace
         exclude: ^org/
       - id: mixed-line-ending
@@ -26,7 +25,6 @@ repos:
         name: ruff check
         entry: python -m ruff check
         language: python
-        exclude: ^org/.*|tests/*
         types: [python]
         additional_dependencies: [ruff]
       - id: pytest-check
