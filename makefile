@@ -6,11 +6,14 @@
 
 
 uv-compile:
-	uv pip compile pyproject.toml -o reqruirements.txt
+	uv pip compile pyproject.toml --output-file requirements.txt --no-emit-index-url --generate-hashes  --no-annotate
+	uv pip compile pyproject.toml --output-file dev-requirements.txt --extra dev --no-emit-index-url --generate-hashes  --no-annotate
 uv-sync:
-	uv pip sync reqruirements.txt
+	uv pip sync dev-requirements.txt
 build:
 	python -m build
+publish:
+	python -m twine upload -r pypi dist/*
 run-debugger:
 	PYTHONBREAKPOINT="pudb.set_trace"
 	python -m pudb ./src/main.py

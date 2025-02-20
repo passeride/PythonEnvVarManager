@@ -16,23 +16,38 @@ maintainers = [
 
 # Required dependencies ------------------------------------------------------------------------------------------------
 dependencies = [
-    "buildtools==1.0.6",
-    "numba==0.60.0",
-    "numpy",
-    "setuptools_scm==8.1.0",
-    "build",
     "ruff>=0.1",
     "loguru>=0.7",
     "python-dotenv",
-    "pytest"
 ]
 
+# Optional dependencies ------------------------------------------------------------------------------------------------
+[project.optional-dependencies]
+dev = [
+    "buildtools==1.0.6",
+    "build",
+    "pytest",
+    "bumpver",
+    "twine"
+]
+
+[tool.bumpver]
+current_version = "1.0.0"
+version_pattern = "MAJOR.MINOR.PATCH"
+commit_message  = "Bump version {old_version} -> {new_version}"
+commit          = true
+tag             = true
+push            = false
+
+[tool.bumpver.file_patterns]
+"pyproject.toml" = ['current_version = "{version}"', 'version = "{version}"']
+"env_manager/__init__.py" = ["{version}"]
 
 [tool.setuptools]
 packages = ["env_manager"]
 
 [build-system]
-requires = ["setuptools>=64", "setuptools_scm>=8"]
+requires = ["setuptools>=64"]
 build-backend = "setuptools.build_meta"
 
 [tool.pydoctor]
@@ -49,10 +64,6 @@ project-name = "Biometrics PNR"
 project-version = "0.1.1"
 sidebar-expand-depth = 2
 
-# Optional dependencies ------------------------------------------------------------------------------------------------
-[project.optional-dependencies]
-dev = [
-]
 [tool.pytest.ini_options]
 log_file = "test_output/pytest.xml"
 testpaths = "tests"
