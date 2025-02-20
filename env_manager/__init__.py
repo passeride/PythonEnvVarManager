@@ -8,7 +8,7 @@ variables that have been set.
 from .env_var_manager import EnvManager
 
 # Version of the realpython-reader package
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 
 def set_write_to_dotenv(write_to_dotenv: bool) -> None:

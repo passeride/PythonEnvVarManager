@@ -1,7 +1,7 @@
 # Project settings -----------------------------------------------------------------------------------------------------
 [project]
 name = "env_manager"  # Required
-version = "0.1.0"
+version = "0.1.1"
 description = "A simple manager to handle env variables"  # Optional
 readme = "README.md"  # Optional
 requires-python = ">=3.10"
@@ -32,7 +32,7 @@ dev = [
 ]
 
 [tool.bumpver]
-current_version = "0.1.0"
+current_version = "0.1.1"
 version_pattern = "MAJOR.MINOR.PATCH"
 commit_message  = "Bump version {old_version} -> {new_version}"
 commit          = true
@@ -61,7 +61,7 @@ intersphinx = [
   "https://docs.pydantic.dev/objects.inv"
 ]
 project-name = "Biometrics PNR"
-project-version = "0.1.0"
+project-version = "0.1.1"
 sidebar-expand-depth = 2
 
 [tool.pytest.ini_options]
