@@ -1,0 +1,37 @@
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.0.1
+    hooks:
+      - id: check-ast
+      - id: check-merge-conflict
+      - id: check-case-conflict
+      - id: check-docstring-first
+      - id: debug-statements
+      - id: end-of-file-fixer
+        exclude: ^test_s3/
+        exclude: ^org/
+      - id: trailing-whitespace
+        exclude: ^org/
+      - id: mixed-line-ending
+-   repo: local
+    hooks:
+      - id: ruff_format
+        name: ruff format
+        entry: python -m ruff format
+        language: python
+        exclude: ^org/
+        types: [python]
+        additional_dependencies: [ruff]
+      - id: ruff_check
+        name: ruff check
+        entry: python -m ruff check
+        language: python
+        exclude: ^org/.*|tests/*
+        types: [python]
+        additional_dependencies: [ruff]
+      - id: pytest-check
+        name: pytest-check
+        entry: .venv/bin/python -m pytest
+        language: python
+        pass_filenames: false
+        always_run: true

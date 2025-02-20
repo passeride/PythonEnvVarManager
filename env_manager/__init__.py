@@ -1,16 +1,14 @@
-from .EnvVarManager import EnvManager
-from importlib import resources
-try:
-    import tomllib
-except ModuleNotFoundError:
-    import tomli as tomllib
+"""A package for managing environment variables in Python applications.
+
+This package provides a simple way to manage environment variables in Python applications. It allows
+you to set environment variables programmatically, retrieve them, and display all the environment
+variables that have been set.
+"""
+
+from .env_var_manager import EnvManager
 
 # Version of the realpython-reader package
 __version__ = "0.1.0"
-
-# Read URL of the Real Python feed from config file
-_cfg = tomllib.loads(resources.read_text("reader", "config.toml"))
-URL = _cfg["feed"]["url"]
 
 
 def set_write_to_dotenv(write_to_dotenv: bool) -> None:
@@ -66,5 +64,3 @@ def get_all_vars() -> dict:
     """
     env = EnvManager()
     return env.get_all_vars()
-
-

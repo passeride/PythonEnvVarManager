@@ -5,6 +5,8 @@
 # @version 0.1
 
 
+pre-commit:
+	pre-commit run --all-files
 uv-compile:
 	uv pip compile pyproject.toml --output-file requirements.txt --no-emit-index-url --generate-hashes  --no-annotate
 	uv pip compile pyproject.toml --output-file dev-requirements.txt --extra dev --no-emit-index-url --generate-hashes  --no-annotate

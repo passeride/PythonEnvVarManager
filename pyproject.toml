@@ -1,10 +1,10 @@
 # Project settings -----------------------------------------------------------------------------------------------------
 [project]
 name = "env_manager"  # Required
-dynamic = ["version"]
-description = ""  # Optional
+version = "0.1.0"
+description = "A simple manager to handle env variables"  # Optional
 readme = "README.md"  # Optional
-requires-python = ">=3.12"
+requires-python = ">=3.10"
 license = { file = "LICENSE" }
 keywords = ["EnvVar", "Os", "Python"]  # Optional
 authors = [
@@ -19,17 +19,16 @@ dependencies = [
     "ruff>=0.1",
     "loguru>=0.7",
     "python-dotenv",
-    "tomli"
 ]
 
 # Optional dependencies ------------------------------------------------------------------------------------------------
 [project.optional-dependencies]
 dev = [
-    "buildtools==1.0.6",
-    "build",
-    "pytest",
-    "bumpver",
-    "twine"
+  "buildtools==1.0.6",
+  "build",
+  "pytest",
+  "bumpver",
+  "twine"
 ]
 
 [tool.bumpver]
@@ -68,7 +67,7 @@ sidebar-expand-depth = 2
 [tool.pytest.ini_options]
 log_file = "test_output/pytest.xml"
 testpaths = "tests"
-pythonpath = "./env_manager"
+pythonpath = "."
 markers = [
   "integration: integration tests that should only be run in those steps. (Deselect with '-m \"not integration\"')",
 ]

@@ -1,3 +1,4 @@
+"""Singleton class to manage environment variables and write missing ones to a .env file."""
 import inspect
 import os
 import re
@@ -39,7 +40,8 @@ class EnvManager:
         self._initialized = True
 
         self._write_to_dotenv = (
-            self.getenv("WRITE_ENV_VARS_TO_DOTENV", "False").lower() == "true"
+            str(self.getenv("WRITE_ENV_VARS_TO_DOTENV", "False")).lower()
+            == "true"
         )
         if self._write_to_dotenv:
             log.debug(
@@ -172,5 +174,3 @@ class EnvManager:
         print("Registered Environment Variables:")
         for key, value in self._registered_vars.items():
             print(f"  {key}: {value}")
-
-

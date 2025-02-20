@@ -29,4 +29,4 @@ def test_envvar_write_to_file():
     ## Verify that the .env file has been updated
     with open(".env") as f:
         lines = f.read()
-        assert "SECRET_KEY=default-secret"in lines
+        assert "SECRET_KEY=default-secret" in lines
