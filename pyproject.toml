@@ -1,6 +1,6 @@
 # Project settings -----------------------------------------------------------------------------------------------------
 [project]
-name = "env_manager"  # Required
+name = "PythonEnvVarManager"  # Required
 version = "0.1.1"
 description = "A simple manager to handle env variables"  # Optional
 readme = "README.md"  # Optional
