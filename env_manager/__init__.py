@@ -8,7 +8,7 @@ variables that have been set.
 from .env_var_manager import EnvManager
 
 # Version of the realpython-reader package
-__version__ = "0.2.0"
+__version__ = "0.2.1"
 
 
 def set_dotenv_path(dotenv_path: str) -> None:
