@@ -7,7 +7,6 @@ readme = "README.md"  # Optional
 requires-python = ">=3.10"
 license = { file = "LICENSE" }
 keywords = ["EnvVar", "Os", "Python"]  # Optional
-url = "https://github.com/passeride/PythonEnvVarManager"
 authors = [
     { name = "Lukas", email = "lukas@passeride.com" } # Optional
 ]
@@ -31,6 +30,12 @@ dev = [
   "bumpver",
   "twine"
 ]
+
+[project.urls]
+Homepage = "https://pypi.org/project/PythonEnvVarManager/"
+Documentation = "https://github.com/passeride/PythonEnvVarManager"
+Repository = "https://github.com/passeride/PythonEnvVarManager"
+Issues = "https://github.com/passeride/PythonEnvVarManager/issues"
 
 [tool.bumpver]
 current_version = "0.2.1"
