@@ -21,7 +21,7 @@ def set_write_to_dotenv(write_to_dotenv: bool) -> None:
     env._write_to_dotenv = write_to_dotenv
 
 
-def getenv(key: str, default: str | int) -> str | int:
+def getenv(key: str, default: str | int | None = None) -> str | int:
     """Retrieve an environment variable. If it's not found in os.environ and a default is provided.
 
     check if the .env file already mentions it (active or commented). If not, append a commented-out

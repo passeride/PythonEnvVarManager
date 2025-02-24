@@ -1,12 +1,14 @@
 """Singleton class to manage environment variables and write missing ones to a .env file."""
+
 import inspect
 import os
 import re
 from os.path import basename
-from typing import Any
 
 from dotenv import load_dotenv
 from loguru import logger as log
+
+original_getenv = os.getenv  # Keep reference to the original
 
 
 class EnvManager:
@@ -16,7 +18,7 @@ class EnvManager:
     _initialized = False
     _write_to_dotenv = False
 
-    def __new__(cls, *args: Any, **kwargs) -> "EnvManager":
+    def __new__(cls, *args: str, **kwargs) -> "EnvManager":
         """Singleton constructor to ensure only one instance is created."""
         if cls._instance is None:
             cls._instance = super().__new__(cls)
@@ -38,6 +40,8 @@ class EnvManager:
         self._load_dotenv_file()
         self._registered_vars = {}  # Registry to track accessed variables
         self._initialized = True
+
+        os.getenv = self.getenv
 
         self._write_to_dotenv = (
             str(self.getenv("WRITE_ENV_VARS_TO_DOTENV", "False")).lower()
@@ -107,12 +111,12 @@ class EnvManager:
             self._env_lines.append("\n")
             self._env_lines.append(comment_line)
             self._env_lines.append(commented_key_line)
-        except Exception as e:
+        except FileNotFoundError as e:
             print(
                 f"Error appending missing variable {key} to {self.dotenv_path}: {e}"
             )
 
-    def getenv(self, key: str, default: str | int) -> str | int:
+    def getenv(self, key: str, default: str | int | None = None) -> str | int:
         """Retrieve an environment variable. If it's not found in os.environ and a default is provided.
 
         check if the .env file already mentions it (active or commented). If not, append a commented-out
@@ -123,7 +127,8 @@ class EnvManager:
             key (str): The environment variable key.
             default (str | int): The default value of the environment variable.
         """
-        value = os.getenv(key, default)
+        global original_getenv
+        value = original_getenv(key, default)
         # Capture the caller's module and line number.
         caller_frame = inspect.stack()[1]
         filename = basename(caller_frame.filename)
