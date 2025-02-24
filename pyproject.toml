@@ -7,11 +7,12 @@ readme = "README.md"  # Optional
 requires-python = ">=3.10"
 license = { file = "LICENSE" }
 keywords = ["EnvVar", "Os", "Python"]  # Optional
+url = "https://github.com/passeride/PythonEnvVarManager"
 authors = [
-    { name = "Lukas H L", email = "lukhl@ntnu.no" } # Optional
+    { name = "Lukas", email = "lukas@passeride.com" } # Optional
 ]
 maintainers = [
-    { name = "Lukas H L", email = "lukhl@ntnu.no" } # Optional
+    { name = "Lukas", email = "lukas@passeride.com" } # Optional
 ]
 
 # Required dependencies ------------------------------------------------------------------------------------------------

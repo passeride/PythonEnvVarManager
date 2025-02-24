@@ -146,7 +146,7 @@ These tests cover:
 
 ## Contributing
 
-Contributions, issues, and feature requests are welcome! Feel free to check [issues page](https://github.com/yourusername/env_manager/issues) if you want to contribute.
+Contributions, issues, and feature requests are welcome! Feel free to check [issues page](https://github.com/passeride/PythonEnvVarManager/issues) if you want to contribute.
 
 ---
 
