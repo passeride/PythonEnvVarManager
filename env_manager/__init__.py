@@ -11,6 +11,26 @@ from .env_var_manager import EnvManager
 __version__ = "0.1.1"
 
 
+def set_dotenv_path(dotenv_path: str) -> None:
+    """Set the path to the .env file.
+
+    Args:
+        dotenv_path (str): The path to the .env file.
+    """
+    env = EnvManager()
+    env.set_dotnet_path(dotenv_path)
+
+
+def get_dotenv_path() -> str:
+    """Return the path to the .env file.
+
+    Returns:
+        str: The path to the .env file.
+    """
+    env = EnvManager()
+    return env.dotenv_path
+
+
 def set_write_to_dotenv(write_to_dotenv: bool) -> None:
     """Set whether to write undocumented environment variables to the .env file.
 

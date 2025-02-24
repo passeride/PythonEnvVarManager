@@ -17,6 +17,8 @@ class EnvManager:
     _instance = None
     _initialized = False
     _write_to_dotenv = False
+    _os_getenv_overwritten = False
+    dotenv_path: str = ".env"
 
     def __new__(cls, *args: str, **kwargs) -> "EnvManager":
         """Singleton constructor to ensure only one instance is created."""
@@ -41,7 +43,14 @@ class EnvManager:
         self._registered_vars = {}  # Registry to track accessed variables
         self._initialized = True
 
-        os.getenv = self.getenv
+        if str(self.getenv("OVERWRITE_OS_GETENV", "False")).lower() == "true":
+            os.getenv = self.getenv
+            self._os_getenv_overwritten = True
+            log.debug("OS Getenv is replaced with PythonEnvVarManger wrapper")
+        else:
+            log.debug(
+                "OS Getenv is not replaced with PythonEnvVarManger wrapper"
+            )
 
         self._write_to_dotenv = (
             str(self.getenv("WRITE_ENV_VARS_TO_DOTENV", "False")).lower()
@@ -55,6 +64,16 @@ class EnvManager:
             log.debug(
                 "Initializing EnvManager without updating dotenv, to change this update `WRITE_ENV_VARS_TO_DOTENV` to `True`"
             )
+
+    def set_dotnet_path(self, path: str) -> None:
+        """Set the path to the .env file.
+
+        Args:
+            path (str): The path to the .env file.
+        """
+        self.dotenv_path = path
+        self._load_dotenv_file()
+        log.debug(f"Dotenv path set to {path}")
 
     def _load_dotenv_file(self) -> None:
         """Load the .env file contents into memory as a list of lines."""
@@ -133,6 +152,8 @@ class EnvManager:
         caller_frame = inspect.stack()[1]
         filename = basename(caller_frame.filename)
         line_number = caller_frame.lineno
+
+        log.debug(f"Getting {key} from os.environ: {value}")
 
         # Only update the .env file if no active or commented line already mentions the key.
         if (

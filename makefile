@@ -22,10 +22,12 @@ run-debugger:
 run-breakpoint:
 	PYTHONBREAKPOINT="pudb.set_trace"
 	python src/main.py
+format:
+	python -m ruff format env_manager
 ruff-fix:
-	python -m ruff check src --fix
+	python -m ruff check env_manager --fix
 ruff-fix-unsafe:
-	python -m ruff check src --fix --unsafe-fixes
+	python -m ruff check env_manager --fix --unsafe-fixes
 test:
 	python -m pytest --capture=no
 test-debugger:
