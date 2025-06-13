@@ -8,7 +8,7 @@ variables that have been set.
 from .env_var_manager import EnvManager
 
 # Version of the realpython-reader package
-__version__ = "0.2.1"
+__version__ = "0.2.2"
 
 
 def set_dotenv_path(dotenv_path: str) -> None:
@@ -39,6 +39,13 @@ def set_write_to_dotenv(write_to_dotenv: bool) -> None:
     """
     env = EnvManager()
     env._write_to_dotenv = write_to_dotenv
+
+
+def load_env_vars_from_dotenv(override: bool = True) -> None:
+    """Load environment variables from the configured ``.env`` file."""
+
+    env = EnvManager()
+    env.load_env_vars_from_dotenv(override=override)
 
 
 def getenv(key: str, default: str | int | None = None) -> str | int:

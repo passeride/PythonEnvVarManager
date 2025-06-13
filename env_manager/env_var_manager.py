@@ -18,6 +18,7 @@ class EnvManager:
     _initialized = False
     _write_to_dotenv = False
     _os_getenv_overwritten = False
+    _load_env_vars_from_dotenv = False
     dotenv_path: str = ".env"
 
     def __new__(cls, *args: str, **kwargs) -> "EnvManager":
@@ -36,8 +37,12 @@ class EnvManager:
             return  # Avoid reinitialization in the singleton
 
         self.dotenv_path = dotenv_path
-        # Load any existing environment variables from the .env file into os.environ
-        load_dotenv(dotenv_path)
+        # Optionally load environment variables from the .env file before anything else
+        self._load_env_vars_from_dotenv = (
+            str(os.getenv("LOAD_ENV_VARS_FROM_DOTENV", "False")).lower() == "true"
+        )
+        if self._load_env_vars_from_dotenv:
+            self.load_env_vars_from_dotenv(override=True)
         # Also read the raw lines of the .env file for later checks.
         self._load_dotenv_file()
         self._registered_vars = {}  # Registry to track accessed variables
@@ -74,6 +79,15 @@ class EnvManager:
         self.dotenv_path = path
         self._load_dotenv_file()
         log.debug(f"Dotenv path set to {path}")
+
+    def load_env_vars_from_dotenv(self, override: bool = True) -> None:
+        """Load environment variables from the configured ``.env`` file."""
+
+        load_dotenv(self.dotenv_path, override=override)
+        self._load_env_vars_from_dotenv = True
+        log.debug(
+            f"Loaded environment variables from {self.dotenv_path} with override={override}"
+        )
 
     def _load_dotenv_file(self) -> None:
         """Load the .env file contents into memory as a list of lines."""
