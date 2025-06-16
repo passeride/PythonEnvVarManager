@@ -4,6 +4,7 @@ import inspect
 import os
 import re
 from os.path import basename
+from typing import Optional, Union
 
 from dotenv import load_dotenv
 from loguru import logger as log
@@ -82,7 +83,6 @@ class EnvManager:
 
     def load_env_vars_from_dotenv(self, override: bool = True) -> None:
         """Load environment variables from the configured ``.env`` file."""
-
         load_dotenv(self.dotenv_path, override=override)
         self._load_env_vars_from_dotenv = True
         log.debug(
@@ -111,10 +111,10 @@ class EnvManager:
     def _append_missing_var_to_dotenv(
         self,
         key: str,
-        value: str | int,
-        default: str | int,
-        filename: str | None,
-        line_number: str | int | None,
+        value: Union[str, int],
+        default: Union[str, int],
+        filename: Optional[str],
+        line_number: Optional[Union[str, int]],
     ) -> None:
         """Append a commented-out default entry to the .env file with a comment showing where the variable was requested.
 
@@ -149,7 +149,9 @@ class EnvManager:
                 f"Error appending missing variable {key} to {self.dotenv_path}: {e}"
             )
 
-    def getenv(self, key: str, default: str | int | None = None) -> str | int:
+    def getenv(
+        self, key: str, default: Optional[Union[str, int]] = None
+    ) -> Optional[Union[str, int]]:
         """Retrieve an environment variable. If it's not found in os.environ and a default is provided.
 
         check if the .env file already mentions it (active or commented). If not, append a commented-out
