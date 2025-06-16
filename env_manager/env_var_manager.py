@@ -4,6 +4,7 @@ import inspect
 import os
 import re
 from os.path import basename
+from typing import Optional, Union
 
 from dotenv import load_dotenv
 from loguru import logger as log
@@ -18,6 +19,7 @@ class EnvManager:
     _initialized = False
     _write_to_dotenv = False
     _os_getenv_overwritten = False
+    _load_env_vars_from_dotenv = False
     dotenv_path: str = ".env"
 
     def __new__(cls, *args: str, **kwargs) -> "EnvManager":
@@ -36,8 +38,12 @@ class EnvManager:
             return  # Avoid reinitialization in the singleton
 
         self.dotenv_path = dotenv_path
-        # Load any existing environment variables from the .env file into os.environ
-        load_dotenv(dotenv_path)
+        # Optionally load environment variables from the .env file before anything else
+        self._load_env_vars_from_dotenv = (
+            str(os.getenv("LOAD_ENV_VARS_FROM_DOTENV", "False")).lower() == "true"
+        )
+        if self._load_env_vars_from_dotenv:
+            self.load_env_vars_from_dotenv(override=True)
         # Also read the raw lines of the .env file for later checks.
         self._load_dotenv_file()
         self._registered_vars = {}  # Registry to track accessed variables
@@ -75,6 +81,14 @@ class EnvManager:
         self._load_dotenv_file()
         log.debug(f"Dotenv path set to {path}")
 
+    def load_env_vars_from_dotenv(self, override: bool = True) -> None:
+        """Load environment variables from the configured ``.env`` file."""
+        load_dotenv(self.dotenv_path, override=override)
+        self._load_env_vars_from_dotenv = True
+        log.debug(
+            f"Loaded environment variables from {self.dotenv_path} with override={override}"
+        )
+
     def _load_dotenv_file(self) -> None:
         """Load the .env file contents into memory as a list of lines."""
         try:
@@ -97,10 +111,10 @@ class EnvManager:
     def _append_missing_var_to_dotenv(
         self,
         key: str,
-        value: str | int,
-        default: str | int,
-        filename: str | None,
-        line_number: str | int | None,
+        value: Union[str, int],
+        default: Union[str, int],
+        filename: Optional[str],
+        line_number: Optional[Union[str, int]],
     ) -> None:
         """Append a commented-out default entry to the .env file with a comment showing where the variable was requested.
 
@@ -135,7 +149,9 @@ class EnvManager:
                 f"Error appending missing variable {key} to {self.dotenv_path}: {e}"
             )
 
-    def getenv(self, key: str, default: str | int | None = None) -> str | int:
+    def getenv(
+        self, key: str, default: Optional[Union[str, int]] = None
+    ) -> Optional[Union[str, int]]:
         """Retrieve an environment variable. If it's not found in os.environ and a default is provided.
 
         check if the .env file already mentions it (active or commented). If not, append a commented-out

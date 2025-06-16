@@ -5,10 +5,12 @@ you to set environment variables programmatically, retrieve them, and display al
 variables that have been set.
 """
 
+from typing import Optional, Union
+
 from .env_var_manager import EnvManager
 
 # Version of the realpython-reader package
-__version__ = "0.2.1"
+__version__ = "0.2.2"
 
 
 def set_dotenv_path(dotenv_path: str) -> None:
@@ -41,7 +43,13 @@ def set_write_to_dotenv(write_to_dotenv: bool) -> None:
     env._write_to_dotenv = write_to_dotenv
 
 
-def getenv(key: str, default: str | int | None = None) -> str | int:
+def load_env_vars_from_dotenv(override: bool = True) -> None:
+    """Load environment variables from the configured ``.env`` file."""
+    env = EnvManager()
+    env.load_env_vars_from_dotenv(override=override)
+
+
+def getenv(key: str, default: Optional[Union[str, int]] = None) -> Optional[Union[str, int]]:
     """Retrieve an environment variable. If it's not found in os.environ and a default is provided.
 
     check if the .env file already mentions it (active or commented). If not, append a commented-out

@@ -111,6 +111,26 @@ By default, undocumented environment variables can be written to the `.env` file
   ENV.set_write_to_dotenv(False)
   ```
 
+### Loading environment variables from `.env`
+
+By default Env Manager does not load values from the configured `.env` file into
+`os.environ`. If you want the variables from this file to override existing
+environment values, set the `LOAD_ENV_VARS_FROM_DOTENV` environment variable to
+`"True"` **before** creating the manager or call:
+
+```python
+ENV.load_env_vars_from_dotenv()
+```
+
+Alternatively, the environment variable can be set:
+
+```bash
+export LOAD_ENV_VARS_FROM_DOTENV=True
+```
+
+When enabled, values in the `.env` file overwrite those already present in
+`os.environ`.
+
 ### Overriding `os.getenv`
 
 To have Env Manager replace `os.getenv` with its enhanced version, set the `OVERWRITE_OS_GETENV` environment variable to `"True"`. This can be done prior to running your application:

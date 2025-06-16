@@ -3,6 +3,18 @@ import os
 import pytest
 
 import env_manager as ENV
+from env_manager.env_var_manager import EnvManager
+
+
+@pytest.fixture(autouse=True)
+def reset_env_manager():
+    """Reset the singleton between tests."""
+
+    EnvManager._instance = None
+    EnvManager._initialized = False
+    yield
+    EnvManager._instance = None
+    EnvManager._initialized = False
 
 
 @pytest.fixture
@@ -77,3 +89,26 @@ def test_osgetenv(set_own_dotenv_file):
     with open(dotnet_path) as f:
         lines = f.read()
         assert "OS_CAPTURED" in lines
+
+
+def test_no_load_from_dotenv(tmp_path, monkeypatch):
+    """Ensure .env is not loaded unless enabled."""
+
+    dotenv = tmp_path / ".env.test"
+    dotenv.write_text("SHOULD_NOT_LOAD=file\n")
+    monkeypatch.setenv("SHOULD_NOT_LOAD", "env")
+    ENV.set_dotenv_path(str(dotenv))
+
+    value = ENV.getenv("SHOULD_NOT_LOAD")
+    assert value == "env"
+
+
+def test_load_from_dotenv(tmp_path, monkeypatch):
+    """Values are loaded from .env when enabled."""
+
+    dotenv = tmp_path / ".env.test"
+    dotenv.write_text("SHOULD_LOAD=file\n")
+    ENV.set_dotenv_path(str(dotenv))
+    ENV.load_env_vars_from_dotenv()
+    value = ENV.getenv("SHOULD_LOAD")
+    assert value == "file"

@@ -1,10 +1,10 @@
 # Project settings -----------------------------------------------------------------------------------------------------
 [project]
 name = "PythonEnvVarManager"  # Required
-version = "0.2.1"
+version = "0.2.2"
 description = "A simple manager to handle env variables"  # Optional
 readme = "README.md"  # Optional
-requires-python = ">=3.10"
+requires-python = ">=3.9"
 license = { file = "LICENSE" }
 keywords = ["EnvVar", "Os", "Python"]  # Optional
 authors = [
@@ -38,7 +38,7 @@ Repository = "https://github.com/passeride/PythonEnvVarManager"
 Issues = "https://github.com/passeride/PythonEnvVarManager/issues"
 
 [tool.bumpver]
-current_version = "0.2.1"
+current_version = "0.2.2"
 version_pattern = "MAJOR.MINOR.PATCH"
 commit_message  = "Bump version {old_version} -> {new_version}"
 commit          = true
@@ -67,7 +67,7 @@ intersphinx = [
   "https://docs.pydantic.dev/objects.inv"
 ]
 project-name = "Biometrics PNR"
-project-version = "0.2.1"
+project-version = "0.2.2"
 sidebar-expand-depth = 2
 
 [tool.pytest.ini_options]
@@ -136,7 +136,7 @@ ignore = [
 
 [tool.ruff]
 line-length = 79
-target-version = "py310"
+target-version = "py39"
 exclude=["scripts", "old_tests"]
 
 [tool.ruff.lint.per-file-ignores]
